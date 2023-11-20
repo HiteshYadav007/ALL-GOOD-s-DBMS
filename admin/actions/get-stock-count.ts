@@ -1,14 +1,8 @@
-import prismadb from "@/lib/prismadb"
+import { getStockCnt } from "@/db/controllers/dashboardController";
 
 export const getStockCount = async (storeId:string) => {
-	const stockCount = await prismadb.product.count({
-		where:{
-			storeId,
-			isArchived:false
-		},
-		
-	});
+	const stockCount = await getStockCnt(storeId);
 
-	return 	stockCount;
+	return 	stockCount.count;
 }
 

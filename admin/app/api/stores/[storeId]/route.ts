@@ -1,5 +1,7 @@
 import { deleteStore, updateCategory } from "@/db/controllers/apiController";
-import { auth } from "@clerk/nextjs";
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+ 
 import { NextResponse } from "next/server";
 
 export async function PATCH(
@@ -7,7 +9,8 @@ export async function PATCH(
   { params }: { params: { storeId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const session = await getServerSession(authOptions);
+	const userId = session?.user.id;
     const { name } = await req.json();
     
 	if (!userId) {
@@ -35,7 +38,8 @@ export async function DELETE(
 	{ params }: { params: { storeId: string } }
 ) {
 	try {
-		const { userId } = auth();
+		const session = await getServerSession(authOptions);
+		const userId = session?.user.id;
 
 		if (!userId) {
 			return new NextResponse("Unauthenticated", { status: 401 });

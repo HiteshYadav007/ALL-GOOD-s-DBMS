@@ -1,7 +1,9 @@
 import { authorizedStore } from "@/db/controllers/apiController";
 import { deleteCategory, getCategory, updateCategory } from "@/db/controllers/categoryApiController";
+import { authOptions } from "@/lib/auth";
 import prismadb from "@/lib/prismadb";
-import { auth } from "@clerk/nextjs";
+ 
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -29,7 +31,8 @@ export async function PATCH(
   { params }: { params: { storeId:string  , categoryId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const session = await getServerSession(authOptions);
+	const userId = session?.user.id;
     const { name , billboardId } = await req.json();
     
 	if (!userId) {
@@ -65,7 +68,8 @@ export async function DELETE(
 	{ params }: { params: { storeId:string ,categoryId: string } }
 ) {
 	try {
-		const { userId } = auth();
+		const session = await getServerSession(authOptions);
+		const userId = session?.user.id;
 
 		if (!userId) {
 			return new NextResponse("Unauthenticated", { status: 401 });

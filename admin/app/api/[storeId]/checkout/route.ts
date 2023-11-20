@@ -20,16 +20,16 @@ export async function POST(
 	req:Request,
 	{ params }:{params:{storeId:string}}
 ) {
-	const { productIds } = await req.json();
+	const { productIds,customerEmail } = await req.json();
 	if (!productIds || productIds.length === 0 ){
 		return new NextResponse("Product Ids are required",{ status:400});
 	} 
-
-	const product = await getAllProductsByProductIDs(productIds);
-	console.log(product);
+	const productIdString = productIds.map((id:string) => `"${id}"`).join(',');
+	const products = await getAllProductsByProductIDs(productIdString);
 	const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
 	
-	line_items.push({
+	products.forEach((product) => {
+			line_items.push({
 				quantity:1,
 				price_data: {
 					currency:"inr",
@@ -39,8 +39,9 @@ export async function POST(
 					unit_amount:product.price * 100,
 				}
 			});
+		});
 
-	const orderId = await insertOrder(params.storeId,product.productId,product.price);
+	const orderId = await insertOrder(params.storeId,products,customerEmail);
 
 	const session = await stripe.checkout.sessions.create({
 		line_items,

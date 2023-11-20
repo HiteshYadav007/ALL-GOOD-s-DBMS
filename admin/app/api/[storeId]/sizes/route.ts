@@ -1,16 +1,19 @@
-import { auth } from "@clerk/nextjs";
+ 
 import { NextResponse } from "next/server";
 
 import prismadb from "@/lib/prismadb";
 import { authorizedStore } from "@/db/controllers/apiController";
 import { getAllSizes, insertSize } from "@/db/controllers/sizeApiController";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export async function POST(
 	req:Request,
 	{ params } : { params: { storeId : string } }
 ) {
 	try {
-		const { userId } = auth();
+		const session = await getServerSession(authOptions);
+		const userId = session?.user.id;
 		const {name , value} = await req.json();
 	
 		if(!userId){

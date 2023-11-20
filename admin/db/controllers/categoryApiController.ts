@@ -28,7 +28,14 @@ export const insertCategory = async (
 export const getAllCategories = async (
 	categoryId:string
 ) => {
-	const queryString = 'SELECT store.subcategory.subCategoryId,store.subcategory.name , store.billboard.label,store.subcategory.createdAt ,store.billboard.billboardId from store.subcategory INNER JOIN store.billboard ON store.subcategory.billboardId = store.billboard.billboardId where store.subcategory.categoryId = ? ORDER BY createdAt DESC ;'
+	const queryString = `SELECT subCategoryId, name, label, createdAt, billboardId
+FROM (
+    SELECT store.subcategory.subCategoryId, store.subcategory.name, store.billboard.label, store.subcategory.createdAt, store.billboard.billboardId
+    FROM store.subcategory
+    INNER JOIN store.billboard ON store.subcategory.billboardId = store.billboard.billboardId
+    WHERE store.subcategory.categoryId = ?
+    ORDER BY store.subcategory.createdAt DESC
+) AS nested_query;`
 	const [rows] = await pool.execute<subCategory[]>(queryString,[categoryId]);
 	const parsedrows:subCategory[] = [];
 	rows.forEach((row) => parsedrows.push(row));
@@ -38,7 +45,13 @@ export const getAllCategories = async (
 export const getCategory = async (
 	id:string
 ) => {
-	const queryString = "SELECT store.subcategory.subcategoryId,store.subcategory.name , store.billboard.label,store.subcategory.createdAt ,store.billboard.billboardId from store.subcategory INNER JOIN store.billboard ON store.subcategory.billboardId = store.billboard.billboardId where store.subcategory.subcategoryId = ? ";
+	const queryString =`SELECT subcategoryId, name, label, createdAt, billboardId
+	FROM (
+		SELECT store.subcategory.subcategoryId, store.subcategory.name, store.billboard.label, store.subcategory.createdAt, store.billboard.billboardId
+		FROM store.subcategory
+		INNER JOIN store.billboard ON store.subcategory.billboardId = store.billboard.billboardId
+		WHERE store.subcategory.subcategoryId = ?
+	) AS nested_query;`;
 	const [rows] = await pool.execute<subCategory[]>(queryString,[id]);
 	const parsedrows:subCategory[] = [];
 	rows.forEach((row) => parsedrows.push(row));
@@ -64,3 +77,6 @@ export const deleteCategory = async (
 	return subcategoryId;
 }
 
+// SELECT store.subcategory.subcategoryId,store.subcategory.name , store.billboard.label,store.subcategory.createdAt ,store.billboard.billboardId from store.subcategory INNER JOIN store.billboard ON store.subcategory.billboardId = store.billboard.billboardId where store.subcategory.subcategoryId = ? 
+
+// getAllCategories : SELECT store.subcategory.subCategoryId,store.subcategory.name , store.billboard.label,store.subcategory.createdAt ,store.billboard.billboardId from store.subcategory INNER JOIN store.billboard ON store.subcategory.billboardId = store.billboard.billboardId where store.subcategory.categoryId = ? ORDER BY createdAt DESC ;

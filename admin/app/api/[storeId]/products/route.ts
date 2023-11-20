@@ -1,21 +1,24 @@
-import { auth } from "@clerk/nextjs";
+ 
 import { NextResponse } from "next/server";
 
 import prismadb from "@/lib/prismadb";
 import { authorizedStore } from "@/db/controllers/apiController";
 import { getProducts, insertProduct } from "@/db/controllers/productApiController";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export async function POST(
 	req:Request,
 	{ params } : { params: { storeId : string } }
 ) {
 	try {
-		const { userId } = auth();
+		const session = await getServerSession(authOptions);
+		const userId = session?.user.id;
 		const {
 			name,
 			imageUrl,
 			price,
-			categoryId,
+			subCategoryId,
 			quantity,
 			sizeId,
 			isFeatured,
@@ -36,7 +39,7 @@ export async function POST(
 		if (!sizeId){
 			return new NextResponse("Size Id is required" , { status: 400});
 		}
-		if (!categoryId){
+		if (!subCategoryId){
 			return new NextResponse("Category Id is required" , { status: 400});
 		}
 		if (!params.storeId){
@@ -49,7 +52,7 @@ export async function POST(
 			return new NextResponse("UnAuthorized",{status:403});
 		}
 
-		const product = await insertProduct(name,price,params.storeId,categoryId,sizeId,quantity,isFeatured,imageUrl);
+		const product = await insertProduct(name,price,params.storeId,subCategoryId,sizeId,quantity,isFeatured,imageUrl);
 	
 		return NextResponse.json(product);
 

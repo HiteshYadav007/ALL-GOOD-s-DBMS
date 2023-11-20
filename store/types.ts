@@ -34,3 +34,19 @@ export interface Size {
 	value:string
 };
 
+export interface Customer {
+	customerId:string
+	name:string
+	email:string
+	password:string
+}
+
+export interface OrderItem{
+	productId:string
+	productName:string,
+	imageUrl:string,
+	price:string,
+	createdAt:Date,
+	sizeName:string,
+	subCategoryName:string
+}

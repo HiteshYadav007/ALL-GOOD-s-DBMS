@@ -1,38 +1,17 @@
-import prismadb from "@/lib/prismadb"
+import { getGraphRevnue } from "@/db/controllers/dashboardController";
+
 
 interface GraphData {
 	name:string
 	total:number
 };
 
+type Revenue = { month: string; monthlyRevenue: number };
+
+
 export const getGraphRevenue = async (storeId:string) => {
-	const paidOrders = await prismadb.order.findMany({
-		where:{
-			storeId,
-			isPaid:true
-		},
-		include:{
-			orderItems:{
-				include:{
-					product:true
-				}
-			}
-		}
-		
-	});
-	const monthlyRevenue: { [key: number]: number } = {};
-
-	for(const order of paidOrders){
-		const month = order.createdAt.getMonth();
-		let revenueForOrder = 0;
-
-		for(const item of order.orderItems ){
-			revenueForOrder += item.product.price.toNumber();
-		}
-		monthlyRevenue[month] = (monthlyRevenue[month] || 0 ) + revenueForOrder ;
-
-	};
-
+	const result = await getGraphRevnue(storeId);
+	const paidOrders: Revenue[] = result[0]  as any as Revenue[];
 	const graphData : GraphData[] = [
 		{name:"Jan" , total: 0},
 		{name:"Feb" , total: 0},
@@ -48,8 +27,11 @@ export const getGraphRevenue = async (storeId:string) => {
 		{name:"Dec" , total: 0},
 	];
 
-	for(const month in monthlyRevenue){
-		graphData[parseInt(month)].total = monthlyRevenue[parseInt(month)];
+	for (const order of paidOrders) {
+		const monthIndex = parseInt(order.month) - 1; // Months are zero-based in JavaScript
+		if (monthIndex >= 0 && monthIndex < 12) {
+			graphData[monthIndex].total = order.monthlyRevenue || 0;
+		}
 	}
 
 	return graphData;

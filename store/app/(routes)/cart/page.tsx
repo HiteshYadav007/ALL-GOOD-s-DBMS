@@ -10,7 +10,6 @@ const Cart = () => {
 	
 	const [isMounted,setIsMounted] = useState(false);
 	const cart = useCart();
-	
 	useEffect(() => {
 		setIsMounted(true);
 	},[]);

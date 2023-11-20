@@ -2,10 +2,10 @@ import './globals.css';
 
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { ClerkProvider } from '@clerk/nextjs';
 import { ModalProvider } from '@/providers/modal-providers';
 import { ToasterProvider } from '@/providers/toast-provider';
 import { ThemeProvider } from '@/providers/theme-providers';
+import { Provider } from '@/providers/authProvider';
 
 
 
@@ -23,7 +23,7 @@ export default function RootLayout({
 }) {
 
   return (
-    <ClerkProvider>
+    <Provider>
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme='system' enableSystem>
@@ -33,6 +33,7 @@ export default function RootLayout({
         </ThemeProvider>
       </body>
     </html>
-    </ClerkProvider>
+    </Provider>
+    
   )
 }

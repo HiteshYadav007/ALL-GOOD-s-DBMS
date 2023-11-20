@@ -1,16 +1,20 @@
 'use client';
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useSearchParams } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-import Button from "@/components/ui/button";
+import Button from "@/components/ui/button1";
 import Currency from "@/components/ui/currency";
 import useCart from "@/hooks/use-cart";
+import { useSession } from "next-auth/react";
 
 
 const Summary = () => {
 	const searchParams = useSearchParams();
+	const session = useSession();
+	console.log(session);
+	const customerEmail = session.data?.user.email;
 	const items = useCart((state) => state.items);
 	const removeAll = useCart((state) => state.removeAll);
 	
@@ -31,7 +35,8 @@ const Summary = () => {
 
 	const onCheckout = async () => {
 		const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/checkout`,{
-			productIds:items.map((item)=>item.productId)
+			productIds:items.map((item)=>item.productId),
+			customerEmail:customerEmail
 		});
 		window.location = response.data.url;
 	}

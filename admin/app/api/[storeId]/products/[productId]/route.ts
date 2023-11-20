@@ -1,7 +1,9 @@
 import { authorizedStore } from "@/db/controllers/apiController";
 import { deleteProduct, getProduct, updateProduct } from "@/db/controllers/productApiController";
+import { authOptions } from "@/lib/auth";
 import prismadb from "@/lib/prismadb";
-import { auth } from "@clerk/nextjs";
+ 
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -29,17 +31,17 @@ export async function PATCH(
   { params }: { params: { storeId:string  ,productId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const session = await getServerSession(authOptions);
+	const userId = session?.user.id;
     const {
 		name,
 		imageUrl,
 		price,
-		quantity,
 		subCategoryId,
+		quantity,
 		sizeId,
 		isFeatured,
 	} = await req.json();
-    
 	if (!userId) {
       	return new NextResponse("Unauthenticated", { status: 401 });
     }
@@ -82,7 +84,8 @@ export async function DELETE(
 	{ params }: { params: { storeId:string ,productId: string } }
 ) {
 	try {
-		const { userId } = auth();
+		const session = await getServerSession(authOptions);
+		const userId = session?.user.id;
 
 		if (!userId) {
 			return new NextResponse("Unauthenticated", { status: 401 });

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Plus, X } from "lucide-react";
 import { Dialog } from "@headlessui/react";
 
-import Button from "@/components/ui/button";
+import Button from "@/components/ui/button1";
 import IconButton from "@/components/ui/icon-button";
 import {  Size } from "@/types";
 import Filter from "./filter";

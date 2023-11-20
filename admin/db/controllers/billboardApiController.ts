@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
 import { RowDataPacket } from 'mysql2';
-
 import pool from '../database';
 
 interface Billboard extends RowDataPacket {

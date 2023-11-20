@@ -1,4 +1,21 @@
-import { Decimal } from "@prisma/client/runtime/library";
+import NextAuth from "next-auth"
+
+declare module "next-auth" {
+  interface User {
+	username:string
+	id:string
+  }
+  interface Session {
+    user: User & {
+		username:string
+		id:string
+	}
+	token:{
+		username:string
+		id:string
+	}
+  }
+}
 
 export interface Billboard {
 	billboardId: string;
@@ -38,4 +55,11 @@ export interface Product {
 	isFeatured:Number
 	imageUrl:string
 
+}
+
+export interface Seller {
+	sellerId:string
+	name:string
+	email:string
+	password:string
 }

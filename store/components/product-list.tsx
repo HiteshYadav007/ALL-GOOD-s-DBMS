@@ -1,7 +1,6 @@
 import { Product } from "@/types";
 import NoResults from "@/components/ui/no-results";
 import ProductCard from "@/components/ui/product-card";
-import getCategories from "@/actions/get-categories";
 
 
 interface ProductListProps {
@@ -12,7 +11,6 @@ interface ProductListProps {
 const ProductList:React.FC<ProductListProps> = async({
 	title, items }) => {
 		
-		const categories = await getCategories();
 		return (
 			<div className="space-y-4">
 				<h3 className="font-bold text-3xl" >

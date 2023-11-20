@@ -19,33 +19,37 @@ interface Product extends RowDataPacket {
 interface Order extends RowDataPacket {
 	orderId: string,
 	productId:string,
-	name:string,
 	phoneno:string,
 	address:string,
 	isPaid:number,
 	createdAt:Date,
+	
 }
 
 export const getAllProductsByProductIDs = async(
 	data:string[]
 ) => {
-	const queryString = 'SELECT * from store.product WHERE productId IN (?);';
-	const [rows] = await pool.execute<Product[]>(queryString,data);
+	const queryString = `SELECT * from store.product WHERE productId IN (${data})`;
+	const [rows] = await pool.execute<Product[]>(queryString);
 	const parsedrows:Product[] = []
 	rows.forEach((row) => parsedrows.push(row));
-	return parsedrows[0];
+	return parsedrows;
 }
 
 export const insertOrder = async (
 	categoryId:string,
-	productId:string,
-	price:number
+	products:Product[],
+	customerEmail:string
 ) => {
 	const orderId = uuidv4();
 	const updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
 	const createdAt = new Date().toISOString().slice(0, 19).replace('T', ' '); 
-	const queryString = 'INSERT INTO store.orders(orderId,productId,categoryId,isPaid,createdAt,updatedAt,price) VALUES (?,?,?,?,?,?,?)';
-	const [row] = await pool.execute(queryString,[orderId,productId,categoryId,0,createdAt,updatedAt,price]);
+	const valuesClause: string = products
+  .map(row => `("${orderId}","${row.productId}", "${categoryId}",${0},"${createdAt}","${updatedAt}",${row.price},${customerEmail})`)
+  .join(',');
+  console.log(valuesClause);
+	const queryString = `INSERT INTO store.orders(orderId,productId,categoryId,isPaid,createdAt,updatedAt,price,customerEmail) VALUES ${valuesClause} `;
+	const [row] = await pool.execute(queryString);
 	return orderId;
 }
 

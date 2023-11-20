@@ -31,7 +31,7 @@ export const insertProduct = async (
 	const updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
 	const createdAt = new Date().toISOString().slice(0, 19).replace('T', ' '); 
 	const queryString = `INSERT INTO store.product(productId,name,price,categoryId,subCategoryId,sizeId,quantity,isFeatured,imageUrl,createdAt,updatedAt) VALUES (?,?,?,?,?,?,?,?,?,?,?);`
-	await pool.execute(queryString,[productId,name,price,categoryId,subCategoryId,sizeId,5,isFeatured,imageUrl,createdAt,updatedAt]);
+	await pool.execute(queryString,[productId,name,price,categoryId,subCategoryId,sizeId,quantity,isFeatured,imageUrl,createdAt,updatedAt]);
 	return productId;
 }
 

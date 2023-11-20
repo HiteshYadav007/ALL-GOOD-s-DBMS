@@ -1,5 +1,7 @@
 import { loadStore } from "@/db/controllers/apiController";
-import { auth } from "@clerk/nextjs";
+import { authOptions } from "@/lib/auth";
+ 
+import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 export default async function SetupLayout({
@@ -7,9 +9,9 @@ export default async function SetupLayout({
 } : {
 	children:React.ReactNode
 }){
-	const {userId} = auth();
+	const session = await getServerSession(authOptions);
 	
-	if(!userId){
+	if(!session?.user){
 		redirect('/sign-in');
 	}
 

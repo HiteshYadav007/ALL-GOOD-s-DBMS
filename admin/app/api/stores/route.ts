@@ -1,13 +1,16 @@
-import { auth } from "@clerk/nextjs";
+ 
 import { NextResponse } from "next/server";
 import { insertCategory } from "@/db/controllers/apiController";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 
 export async function POST(
 	req:Request,
 ) {
 	try {
-		const { userId } = auth();
+		const session = await getServerSession(authOptions);
+		const userId = session?.user.id;
 		const body = await req.json();
 		const { name } = body;
  

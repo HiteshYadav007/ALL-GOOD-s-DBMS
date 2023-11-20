@@ -1,8 +1,10 @@
-import { auth } from "@clerk/nextjs";
+ 
 import { redirect } from "next/navigation";
 
 import Navbar from "@/components/Navbar";
 import { findFirst } from "@/db/controllers/apiController";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export default async function DashboardLayout({
 	children,
@@ -12,9 +14,9 @@ export default async function DashboardLayout({
 	params:{storeId:string}
 }) {
 	
-	const {userId} = auth();
+	const session = await getServerSession(authOptions);
 	
-	if(!userId){
+	if(!session?.user){
 		redirect('/sign-in');
 	}
 	
