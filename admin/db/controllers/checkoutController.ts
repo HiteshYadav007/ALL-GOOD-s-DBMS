@@ -45,7 +45,7 @@ export const insertOrder = async (
 	const updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
 	const createdAt = new Date().toISOString().slice(0, 19).replace('T', ' '); 
 	const valuesClause: string = products
-  .map(row => `("${orderId}","${row.productId}", "${categoryId}",${0},"${createdAt}","${updatedAt}",${row.price},${customerEmail})`)
+  .map(row => `("${orderId}","${row.productId}", "${categoryId}",${0},"${createdAt}","${updatedAt}",${row.price},"${customerEmail}")`)
   .join(',');
   console.log(valuesClause);
 	const queryString = `INSERT INTO store.orders(orderId,productId,categoryId,isPaid,createdAt,updatedAt,price,customerEmail) VALUES ${valuesClause} `;

@@ -48,9 +48,9 @@ export async function POST(
 
 		const storeByUserId = await authorizedStore(params.storeId,userId);
 
-		if(!storeByUserId){
-			return new NextResponse("UnAuthorized",{status:403});
-		}
+		// if(!storeByUserId){
+		// 	return new NextResponse("UnAuthorized",{status:403});
+		// }
 
 		const product = await insertProduct(name,price,params.storeId,subCategoryId,sizeId,quantity,isFeatured,imageUrl);
 	

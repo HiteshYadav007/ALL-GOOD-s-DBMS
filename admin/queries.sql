@@ -28,7 +28,7 @@ END;
 // 
 DELIMITER ;
 
-
+STR_TO_DATE(CONCAT(YEAR(NOW()), '-', LPAD(currentMonth, 2, '0'), '-01'), '%Y-%m-%d');
 
 DELIMITER //
 

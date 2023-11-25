@@ -29,11 +29,11 @@ export async function POST(
 			return new NextResponse("Store Id is required" , { status: 400});
 		}
 
-		const storeByUserId = await authorizedStore(params.storeId,userId);
+		// const storeByUserId = await authorizedStore(params.storeId,userId);
 
-		if(!storeByUserId){
-			return new NextResponse("UnAuthorized",{status:403});
-		}
+		// if(!storeByUserId){
+		// 	return new NextResponse("UnAuthorized",{status:403});
+		// }
 		const billboard = await insertBillboard(label,imageUrl,params.storeId);
 		
 		return NextResponse.json(billboard);

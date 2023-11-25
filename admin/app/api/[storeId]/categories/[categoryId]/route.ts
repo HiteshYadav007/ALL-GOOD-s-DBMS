@@ -45,14 +45,14 @@ export async function PATCH(
 		return new NextResponse("billboardId is required",{ status:400 });
 	}
 	if(!params.categoryId){
-		return new NextResponse("categoryId is required",{status:400});
+		return new NextResponse("categoryId is required",{status:400});	
 	}
+	console.log(userId);
+	// const storeByUserId = await authorizedStore(params.storeId,userId);
 
-	const storeByUserId = await authorizedStore(params.storeId,userId);
-
-	if(!storeByUserId){
-		return new NextResponse("UnAuthorized",{status:403});
-	}
+	// if(!storeByUserId){
+	// 	return new NextResponse("UnAuthorized",{status:403});
+	// }
 	const category = await updateCategory(params.categoryId,name,billboardId);
 
 	return NextResponse.json(category);
@@ -79,11 +79,11 @@ export async function DELETE(
 			return new NextResponse("categoryId is required",{status:400});
 		}
 
-		const storeByUserId = await authorizedStore(params.storeId,userId);
+		// const storeByUserId = await authorizedStore(params.storeId,userId);
 	
-		if(!storeByUserId){
-			return new NextResponse("UnAuthorized",{status:403});
-		}
+		// if(!storeByUserId){
+		// 	return new NextResponse("UnAuthorized",{status:403});
+		// }
 
 		const category = await deleteCategory(params.categoryId);
 		console.log(category);

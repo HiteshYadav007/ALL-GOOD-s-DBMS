@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import SignOut from "./signOut";
 import { useSession } from "next-auth/react";
+import { ThemeToggle } from "./ui/theme-toggle";
 
 const NavbarActions = () => {
 
@@ -44,6 +45,7 @@ const NavbarActions = () => {
 				<span className="font-medium ml-2 text-sm text-white">Orders</span>
 			</Button>
 			<SignOut/>
+			<ThemeToggle/>
 			
 		</div>
   )

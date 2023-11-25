@@ -42,14 +42,15 @@ export const getGraphRevnue = async(categoryId:string) => {
 }
 
 export const getSalesCnts = async(categoryId:string) => {
-	const queryString = `SELECT COUNT(*) as count from store.orders WHERE isPaid = 1 and categoryId = ?`;
+	const queryString = `SELECT COUNT(*) as count from store.orders WHERE isPaid = 1 and store.orders.categoryId = ?`;
 	const  [rows] = await pool.execute<salesCount[]>(queryString,[categoryId]);
 	const parsedRows:any= rows[0];
 	return parsedRows;
 }
 
 export const getStockCnt =async (categoryId:string) => {
-	const queryString = `SELECT SUM(quantity) as count from store.product WHERE categoryId = ?`;
+	const queryString = `SELECT SUM(quantity) as count from store.product INNER JOIN  store.subcategory 
+	 ON store.product.subCategoryId = store.subcategory.subCategoryId WHERE store.subcategory.categoryId = ?`;
 	const  [rows] = await pool.execute<salesCount[]>(queryString,[categoryId]);
 	const parsedRows:any= rows[0];
 	return parsedRows;

@@ -32,7 +32,9 @@ export async function PATCH(
 ) {
   try {
     const session = await getServerSession(authOptions);
+	console.log(session);
 	const userId = session?.user.id;
+	console.log(userId);
     const {
 		name,
 		imageUrl,
@@ -63,12 +65,12 @@ export async function PATCH(
 	if(!params.productId){
 		return new NextResponse("Product 	Id is required",{status:400});
 	}
+	console.log(userId);
+	// const storeByUserId = await authorizedStore(params.storeId,userId);
 
-	const storeByUserId = await authorizedStore(params.storeId,userId);
-
-	if(!storeByUserId){
-		return new NextResponse("UnAuthorized",{status:403});
-	}
+	// if(!storeByUserId){
+	// 	return new NextResponse("UnAuthorized",{status:403});
+	// }
 	const product = await updateProduct(params.productId,name,price,subCategoryId,sizeId,quantity,isFeatured,imageUrl);
 
 	return NextResponse.json(product);
@@ -95,11 +97,11 @@ export async function DELETE(
 			return new NextResponse("Product Id is required",{status:400});
 		}
 
-		const storeByUserId = await authorizedStore(params.storeId,userId);
+		// const storeByUserId = await authorizedStore(params.storeId,userId);
 	
-		if(!storeByUserId){
-			return new NextResponse("UnAuthorized",{status:403});
-		}
+		// if(!storeByUserId){
+		// 	return new NextResponse("UnAuthorized",{status:403});
+		// }
 
 		const product = await deleteProduct(params.productId);
 

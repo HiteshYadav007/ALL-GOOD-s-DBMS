@@ -25,11 +25,11 @@ export async function POST(
 		if (!params.storeId){
 			return new NextResponse("Store Id is required" , { status: 400});
 		}
-		const storeByUserId = await authorizedStore(params.storeId,userId);
+		// const storeByUserId = await authorizedStore(params.storeId,userId);
 
-		if(!storeByUserId){
-			return new NextResponse("UnAuthorized",{status:403});
-		}
+		// if(!storeByUserId){
+		// 	return new NextResponse("UnAuthorized",{status:403});
+		// }
 
 		const category = await insertCategory(name,params.storeId,billboardId);
 		return NextResponse.json(category);

@@ -48,11 +48,11 @@ export async function PATCH(
 		return new NextResponse("BillboardId is required",{status:400});
 	}
 
-	const storeByUserId = await authorizedStore(params.storeId,userId);
+	// const storeByUserId = await authorizedStore(params.storeId,userId);
 
-	if(!storeByUserId){
-		return new NextResponse("UnAuthorized",{status:403});
-	}
+	// if(!storeByUserId){
+	// 	return new NextResponse("UnAuthorized",{status:403});
+	// }
 	const billboard = await updateBillboard(label,imageUrl,params.billboardId);
 
 	return NextResponse.json(billboard);
@@ -78,11 +78,11 @@ export async function DELETE(
 			return new NextResponse("BillboardId is required",{status:400});
 		}
 
-		const storeByUserId = await authorizedStore(params.storeId,userId);
+		// const storeByUserId = await authorizedStore(params.storeId,userId);
 	
-		if(!storeByUserId){
-			return new NextResponse("UnAuthorized",{status:403});
-		}
+		// if(!storeByUserId){
+		// 	return new NextResponse("UnAuthorized",{status:403});
+		// }
 
 		const billboard = await deleteBillboard(params.billboardId);
 

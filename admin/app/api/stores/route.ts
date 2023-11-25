@@ -11,6 +11,7 @@ export async function POST(
 	try {
 		const session = await getServerSession(authOptions);
 		const userId = session?.user.id;
+		console.log(userId);
 		const body = await req.json();
 		const { name } = body;
  
@@ -26,6 +27,7 @@ export async function POST(
 				userId,
 			}
 		});
+		console.log(storeId);
 		return NextResponse.json(storeId);
 
 	} catch (error) {

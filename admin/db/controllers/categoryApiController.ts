@@ -34,7 +34,7 @@ FROM (
     FROM store.subcategory
     INNER JOIN store.billboard ON store.subcategory.billboardId = store.billboard.billboardId
     WHERE store.subcategory.categoryId = ?
-    ORDER BY store.subcategory.createdAt DESC
+    ORDER BY store.subcategory.createdAt 
 ) AS nested_query;`
 	const [rows] = await pool.execute<subCategory[]>(queryString,[categoryId]);
 	const parsedrows:subCategory[] = [];

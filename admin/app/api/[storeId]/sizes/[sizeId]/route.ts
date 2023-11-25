@@ -48,12 +48,12 @@ export async function PATCH(
 		return new NextResponse("sizeId is required",{status:400});
 	}
 
-	const storeByUserId = await authorizedStore(params.storeId,userId);
+	// const storeByUserId = await authorizedStore(params.storeId,userId);
 
 
-	if(!storeByUserId){
-		return new NextResponse("UnAuthorized",{status:403});
-	}
+	// if(!storeByUserId){
+	// 	return new NextResponse("UnAuthorized",{status:403});
+	// }
 	const size = await updateSize(name,value,params.sizeId);
 
 	return NextResponse.json(size);
@@ -80,11 +80,11 @@ export async function DELETE(
 			return new NextResponse("sizeId is required",{status:400});
 		}
 
-		const storeByUserId = await authorizedStore(params.storeId,userId);
+		// const storeByUserId = await authorizedStore(params.storeId,userId);
 	
-		if(!storeByUserId){
-			return new NextResponse("UnAuthorized",{status:403});
-		}
+		// if(!storeByUserId){
+		// 	return new NextResponse("UnAuthorized",{status:403});
+		// }
 
 		const size = await deleteSize(params.sizeId);
 

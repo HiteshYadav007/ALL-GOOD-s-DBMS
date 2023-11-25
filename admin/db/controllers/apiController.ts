@@ -23,6 +23,7 @@ export const insertCategory = async ({data}:{data:{name:string , userId:string}}
 	const updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
 	const createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
 	const userId = data.userId;
+	console.log("userId",userId);
 	const name = data.name;
 	const queryString = 'INSERT INTO store.category (id,name,userId,createdAt, updatedAt) VALUES(?,?,?,?,?); ';
 	const [inserted] = await pool.execute(queryString,[id,name,userId,updatedAt,createdAt]);
@@ -61,6 +62,7 @@ export const authorizedStore = async (
 	storeId:string,
 	userId:string
 ) => {
+
 	const queryString = `SELECT * FROM store.category where (id = ? and userId=?);`
 	const [rows] = await pool.query<Store[]>(queryString,[storeId,userId])
 	const parsedRows:any = [];
